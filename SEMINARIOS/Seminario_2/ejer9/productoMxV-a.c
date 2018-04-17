@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#ifdef _OPENMP
+	#include <omp.h>
+#else
+	#define omp_get_thread_num() 0
+#endif
 
 int main(int argc, char const *argv[])
 {
@@ -24,20 +29,23 @@ int main(int argc, char const *argv[])
 	v_res = (double*) malloc(N*sizeof(double));
 	
 	srand(time(NULL));
+	#pragma omp parallel for //shared(N, m, v, v_res)
 	for(i = 0 ; i < N ; ++i)
 	{
 		m[i] = (double*) malloc(N*sizeof(double));
-		v[i] = rand();
+		v[i] = 2;//rand();
 		v_res[i] = 0;
+		#pragma omp parallel for
 		for(j=0 ; j < N ; ++j)
 		{
-			m[i][j] = rand();
+			m[i][j] = 2;//rand();
 		}
 	}
 
 	double tmp;
 	clock_gettime(CLOCK_REALTIME,&cgt1);
 
+	#pragma omp parallel for shared(N, m, v, v_res) private(tmp)
 	for(i=0; i<N; i++){
         tmp=0;
         for(j=0; j<N; j++){
