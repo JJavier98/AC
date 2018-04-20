@@ -1,11 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#ifdef _OPENMP
-	#include <omp.h>
-#else
-	#define omp_get_thread_num() 0
-#endif
+
+#define MAX 1000
 
 int main(int argc, char const *argv[])
 {
@@ -21,31 +18,23 @@ int main(int argc, char const *argv[])
 					i,
 					j;
 
-	double 			**m;
-	double 			*v, *v_res;
-
-		m = (double**) malloc(N*sizeof(double*));
-		v = (double*) malloc(N*sizeof(double));
-	v_res = (double*) malloc(N*sizeof(double));
+	double 			m[MAX][MAX];
+	double 			v[MAX], v_res[MAX];
 	
 	srand(time(NULL));
-	#pragma omp parallel for
 	for(i = 0 ; i < N ; ++i)
 	{
-		m[i] = (double*) malloc(N*sizeof(double));
-		v[i] = 2;//rand();
+		v[i] = rand();
 		v_res[i] = 0;
-
 		for(j=0 ; j < N ; ++j)
 		{
-			m[i][j] = 2;//rand();
+			m[i][j] = rand();
 		}
 	}
 
 	double tmp;
 	clock_gettime(CLOCK_REALTIME,&cgt1);
 
-	#pragma omp parallel for
 	for(i=0; i<N; i++){
         tmp=0;
         for(j=0; j<N; j++){
@@ -70,10 +59,6 @@ int main(int argc, char const *argv[])
 		printf("v[0]: %f\n", v_res[0]);
 		printf("v[%d]: %f\n", N-1, v_res[N-1]);
 	}
-
-	for(i = 0 ; i < N ; ++i)
-		free(m[i]);
-	free(m);
 
 	printf("tiempo: %11.9f\n", ncgt);
 

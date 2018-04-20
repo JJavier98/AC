@@ -1,1 +1,0 @@
-gcc -fopenmp -O2 x.c -o x

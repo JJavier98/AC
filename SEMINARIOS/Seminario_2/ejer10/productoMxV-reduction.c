@@ -20,7 +20,6 @@ int main(int argc, char const *argv[])
 	int 			N 	= atoi(argv[1]),
 					i,
 					j;
-
 	double 			**m;
 	double 			*v, *v_res;
 
@@ -42,16 +41,12 @@ int main(int argc, char const *argv[])
 		}
 	}
 
-	double tmp;
 	clock_gettime(CLOCK_REALTIME,&cgt1);
-
-	#pragma omp parallel for
 	for(i=0; i<N; i++){
-        tmp=0;
+        #pragma omp parallel for reduction(+:v_res[i])
         for(j=0; j<N; j++){
-            tmp += m[i][j]*v[j];
+            v_res[i] += m[i][j]*v[j];
         }
-        v_res[i] = tmp;
     }
 
     clock_gettime(CLOCK_REALTIME,&cgt2);
