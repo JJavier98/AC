@@ -22,19 +22,20 @@ int main(int argc, char **argv) {
 
     for (i = 0; i < n; i++) a[i] = i;
 
-#pragma omp parallel
+    #pragma omp parallel
     {
-#pragma omp for firstprivate(suma) lastprivate(suma) schedule(dynamic,chunk)
+    #pragma omp for firstprivate(suma) lastprivate(suma) schedule(dynamic,chunk)
         for (i = 0; i < n; i++) {
             suma = suma + a[i];
             printf(" thread %d suma a[%d]=%d suma=%d \n", omp_get_thread_num(), i, a[i], suma);
         }
 
-#pragma omp single
+    #pragma omp single
         {
             omp_get_schedule(&kind, &modifier);
 
-            printf("\nValores actuales: dyn-var: %d, nthreads-var: %d, run-sched-var[kind: %d, modifier: %d]\n", omp_get_dynamic(), omp_get_max_threads(), kind, modifier);
+            printf("\nValores actuales: dyn-var: %d, nthreads-var: %d, run-sched-var[kind: %d, modifier: %d]\n",
+            omp_get_dynamic(), omp_get_max_threads(), kind, modifier);
 
             omp_set_dynamic(10);
             omp_set_num_threads(5);
@@ -42,7 +43,8 @@ int main(int argc, char **argv) {
 
             omp_get_schedule(&kind, &modifier);
 
-            printf("\nValores modificados: dyn-var: %d, nthreads-var: %d, run-sched-var[kind: %d, modifier: %d]\n", omp_get_dynamic(), omp_get_max_threads(), kind, modifier);
+            printf("\nValores modificados: dyn-var: %d, nthreads-var: %d, run-sched-var[kind: %d, modifier: %d]\n",
+             omp_get_dynamic(), omp_get_max_threads(), kind, modifier);
         }
     }
 
