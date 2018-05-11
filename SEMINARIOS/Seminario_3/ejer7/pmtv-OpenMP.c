@@ -1,33 +1,33 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#ifdef _OPENMP
+	#include <omp.h>
+#else
+	#define omp_get_thread_num() 0
+#endif
 
 int main(int argc, char const *argv[])
 {
-	if (argc<2)
-	{
-		printf("Faltan tamaño de la matriz\n");
-		exit(-1);
-	}
 	struct timespec cgt1,
 					cgt2;
 	double 			ncgt; //para tiempo de ejecución
-	int 			N 	= atoi(argv[1]),
+	int 			N 	= 15360,
 					i,
 					j;
 
-	double 			**m;
-	double 			*v, *v_res;
+	double **m;
+	double *v, *v_res;
 
-		m = (double**) malloc(N*sizeof(double*));
-		v = (double*) malloc(N*sizeof(double));
-	v_res = (double*) malloc(N*sizeof(double));
-	
+	m = (double **)malloc(N * sizeof(double *));
+	v = (double *)malloc(N * sizeof(double));
+	v_res = (double *)malloc(N * sizeof(double));
+
 	srand(time(NULL));
-
+	#pragma omp parallel for
 	for(i = 0 ; i < N ; ++i)
 	{
-		m[i] = (double*) malloc(N*sizeof(double));
+		m[i] = (double *)malloc(N * sizeof(double));
 		v[i] = 2;//rand()%5+1;
 		v_res[i] = 0;
 
@@ -38,11 +38,11 @@ int main(int argc, char const *argv[])
 				m[i][j] = 0;
 		}
 	}
-
 	double tmp;
 	clock_gettime(CLOCK_REALTIME,&cgt1);
-
+	#pragma omp parallel for
 	for(i=0; i<N; i++){
+		//printf("hebra nº %d\n", omp_get_thread_num());
         tmp=0;
         for(j=i; j<N; j++){
             tmp += m[i][j]*v[j];
@@ -67,13 +67,13 @@ int main(int argc, char const *argv[])
 		printf("v[%d]: %f\n", N-1, v_res[N-1]);
 	}
 
-	for(i = 0 ; i < N ; ++i)
+	for (i = 0; i < N; ++i)
 		free(m[i]);
 	free(m);
 	free(v);
 	free(v_res);
 
-	printf("tiempo: %11.9f\n", ncgt);
+	printf(/*"tiempo: */ "%11.9f\n", ncgt);
 
 	return 0;
 }
