@@ -1,0 +1,106 @@
+	.file	"daxpy.c"
+	.text
+	.section	.rodata.str1.1,"aMS",@progbits,1
+.LC1:
+	.string	"V2[0]: %d\n"
+.LC2:
+	.string	"V2[79999]: %d\n"
+.LC3:
+	.string	"tiempo:  %11.9f\n"
+	.section	.text.startup,"ax",@progbits
+	.p2align 4,,15
+	.globl	main
+	.type	main, @function
+main:
+.LFB41:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	xorl	%edi, %edi
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	pushq	%r13
+	pushq	%r12
+	pushq	%rbx
+	leaq	-80(%rbp), %rsi
+	subq	$72, %rsp
+	.cfi_offset 13, -24
+	.cfi_offset 12, -32
+	.cfi_offset 3, -40
+	movq	%fs:40, %rax
+	movq	%rax, -40(%rbp)
+	xorl	%eax, %eax
+	movl	$320016, %eax
+	subq	%rax, %rsp
+	movq	%rsp, %r12
+	subq	%rax, %rsp
+	leaq	3(%rsp), %r13
+	call	clock_gettime@PLT
+	shrq	$2, %r13
+	xorl	%edx, %edx
+	xorl	%eax, %eax
+	leaq	0(,%r13,4), %rbx
+	.p2align 4,,10
+	.p2align 3
+.L2:
+	movl	%edx, (%rbx,%rax,4)
+	movl	%eax, (%r12,%rax,4)
+	addq	$1, %rax
+	addl	$3549, %edx
+	cmpq	$80000, %rax
+	jne	.L2
+	leaq	-64(%rbp), %rsi
+	xorl	%edi, %edi
+	call	clock_gettime@PLT
+	movq	-56(%rbp), %rax
+	subq	-72(%rbp), %rax
+	leaq	.LC1(%rip), %rsi
+	pxor	%xmm0, %xmm0
+	movl	0(,%r13,4), %edx
+	pxor	%xmm1, %xmm1
+	movl	$1, %edi
+	cvtsi2sdq	%rax, %xmm0
+	movq	-64(%rbp), %rax
+	subq	-80(%rbp), %rax
+	cvtsi2sdq	%rax, %xmm1
+	xorl	%eax, %eax
+	divsd	.LC0(%rip), %xmm0
+	addsd	%xmm1, %xmm0
+	movsd	%xmm0, -88(%rbp)
+	call	__printf_chk@PLT
+	movl	319996(,%r13,4), %edx
+	leaq	.LC2(%rip), %rsi
+	movl	$1, %edi
+	xorl	%eax, %eax
+	call	__printf_chk@PLT
+	movsd	-88(%rbp), %xmm0
+	leaq	.LC3(%rip), %rsi
+	movl	$1, %edi
+	movl	$1, %eax
+	call	__printf_chk@PLT
+	xorl	%eax, %eax
+	movq	-40(%rbp), %rcx
+	xorq	%fs:40, %rcx
+	jne	.L7
+	leaq	-24(%rbp), %rsp
+	popq	%rbx
+	popq	%r12
+	popq	%r13
+	popq	%rbp
+	.cfi_remember_state
+	.cfi_def_cfa 7, 8
+	ret
+.L7:
+	.cfi_restore_state
+	call	__stack_chk_fail@PLT
+	.cfi_endproc
+.LFE41:
+	.size	main, .-main
+	.section	.rodata.cst8,"aM",@progbits,8
+	.align 8
+.LC0:
+	.long	0
+	.long	1104006501
+	.ident	"GCC: (Ubuntu 7.3.0-16ubuntu3) 7.3.0"
+	.section	.note.GNU-stack,"",@progbits

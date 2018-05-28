@@ -1,0 +1,190 @@
+	.file	"daxpy.c"
+	.text
+	.section	.rodata
+.LC1:
+	.string	"V2[0]: %d\n"
+.LC2:
+	.string	"V2[79999]: %d\n"
+.LC3:
+	.string	"tiempo:  %11.9f\n"
+	.text
+	.globl	main
+	.type	main, @function
+main:
+.LFB5:
+	.cfi_startproc
+	pushq	%rbp
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp
+	.cfi_def_cfa_register 6
+	pushq	%r13
+	pushq	%r12
+	pushq	%rbx
+	subq	$152, %rsp
+	.cfi_offset 13, -24
+	.cfi_offset 12, -32
+	.cfi_offset 3, -40
+	movl	%edi, -148(%rbp)
+	movq	%rsi, -160(%rbp)
+	movq	%fs:40, %rax
+	movq	%rax, -40(%rbp)
+	xorl	%eax, %eax
+	movq	%rsp, %rax
+	movq	%rax, %rbx
+	movl	$80000, -128(%rbp)
+	movl	$3548, -132(%rbp)
+	movl	-128(%rbp), %eax
+	cltq
+	subq	$1, %rax
+	movq	%rax, -120(%rbp)
+	movl	-128(%rbp), %eax
+	cltq
+	movq	%rax, %r12
+	movl	$0, %r13d
+	movl	-128(%rbp), %eax
+	cltq
+	movq	%rax, %rdx
+	movl	$0, %ecx
+	movl	-128(%rbp), %eax
+	cltq
+	salq	$2, %rax
+	leaq	3(%rax), %rdx
+	movl	$16, %eax
+	subq	$1, %rax
+	addq	%rdx, %rax
+	movl	$16, %esi
+	movl	$0, %edx
+	divq	%rsi
+	imulq	$16, %rax, %rax
+	subq	%rax, %rsp
+	movq	%rsp, %rax
+	addq	$3, %rax
+	shrq	$2, %rax
+	salq	$2, %rax
+	movq	%rax, -112(%rbp)
+	movl	-128(%rbp), %eax
+	cltq
+	subq	$1, %rax
+	movq	%rax, -104(%rbp)
+	movl	-128(%rbp), %eax
+	cltq
+	movq	%rax, %r10
+	movl	$0, %r11d
+	movl	-128(%rbp), %eax
+	cltq
+	movq	%rax, %r8
+	movl	$0, %r9d
+	movl	-128(%rbp), %eax
+	cltq
+	salq	$2, %rax
+	leaq	3(%rax), %rdx
+	movl	$16, %eax
+	subq	$1, %rax
+	addq	%rdx, %rax
+	movl	$16, %edi
+	movl	$0, %edx
+	divq	%rdi
+	imulq	$16, %rax, %rax
+	subq	%rax, %rsp
+	movq	%rsp, %rax
+	addq	$3, %rax
+	shrq	$2, %rax
+	salq	$2, %rax
+	movq	%rax, -96(%rbp)
+	leaq	-80(%rbp), %rax
+	movq	%rax, %rsi
+	movl	$0, %edi
+	call	clock_gettime@PLT
+	movl	$0, -124(%rbp)
+	jmp	.L2
+.L3:
+	movq	-112(%rbp), %rax
+	movl	-124(%rbp), %edx
+	movslq	%edx, %rdx
+	movl	-124(%rbp), %ecx
+	movl	%ecx, (%rax,%rdx,4)
+	movq	-96(%rbp), %rax
+	movl	-124(%rbp), %edx
+	movslq	%edx, %rdx
+	movl	-124(%rbp), %ecx
+	movl	%ecx, (%rax,%rdx,4)
+	movq	-96(%rbp), %rax
+	movl	-124(%rbp), %edx
+	movslq	%edx, %rdx
+	movl	(%rax,%rdx,4), %ecx
+	movq	-112(%rbp), %rax
+	movl	-124(%rbp), %edx
+	movslq	%edx, %rdx
+	movl	(%rax,%rdx,4), %eax
+	imull	-132(%rbp), %eax
+	addl	%eax, %ecx
+	movq	-96(%rbp), %rax
+	movl	-124(%rbp), %edx
+	movslq	%edx, %rdx
+	movl	%ecx, (%rax,%rdx,4)
+	addl	$1, -124(%rbp)
+.L2:
+	movl	-124(%rbp), %eax
+	cmpl	-128(%rbp), %eax
+	jl	.L3
+	leaq	-64(%rbp), %rax
+	movq	%rax, %rsi
+	movl	$0, %edi
+	call	clock_gettime@PLT
+	movq	-64(%rbp), %rdx
+	movq	-80(%rbp), %rax
+	subq	%rax, %rdx
+	movq	%rdx, %rax
+	cvtsi2sdq	%rax, %xmm1
+	movq	-56(%rbp), %rdx
+	movq	-72(%rbp), %rax
+	subq	%rax, %rdx
+	movq	%rdx, %rax
+	cvtsi2sdq	%rax, %xmm0
+	movsd	.LC0(%rip), %xmm2
+	divsd	%xmm2, %xmm0
+	addsd	%xmm1, %xmm0
+	movsd	%xmm0, -88(%rbp)
+	movq	-96(%rbp), %rax
+	movl	(%rax), %eax
+	movl	%eax, %esi
+	leaq	.LC1(%rip), %rdi
+	movl	$0, %eax
+	call	printf@PLT
+	movq	-96(%rbp), %rax
+	movl	319996(%rax), %eax
+	movl	%eax, %esi
+	leaq	.LC2(%rip), %rdi
+	movl	$0, %eax
+	call	printf@PLT
+	movq	-88(%rbp), %rax
+	movq	%rax, -168(%rbp)
+	movsd	-168(%rbp), %xmm0
+	leaq	.LC3(%rip), %rdi
+	movl	$1, %eax
+	call	printf@PLT
+	movl	$0, %eax
+	movq	%rbx, %rsp
+	movq	-40(%rbp), %rbx
+	xorq	%fs:40, %rbx
+	je	.L5
+	call	__stack_chk_fail@PLT
+.L5:
+	leaq	-24(%rbp), %rsp
+	popq	%rbx
+	popq	%r12
+	popq	%r13
+	popq	%rbp
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE5:
+	.size	main, .-main
+	.section	.rodata
+	.align 8
+.LC0:
+	.long	0
+	.long	1104006501
+	.ident	"GCC: (Ubuntu 7.3.0-16ubuntu3) 7.3.0"
+	.section	.note.GNU-stack,"",@progbits
